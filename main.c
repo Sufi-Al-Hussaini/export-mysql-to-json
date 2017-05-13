@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "parson.h"
 
 int g_hd_cnt;
@@ -32,8 +33,13 @@ int parse_tbl_hd() {
 int main() {
     char tsv[1024] = {0};
 
-    if (fgets(g_thead, sizeof g_thead, stdin) == NULL) {
+    if (isatty(fileno(stdin))) {
         printf("No input!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (fgets(g_thead, sizeof g_thead, stdin) == NULL) {
+        printf("Failed to read input!\n");
         exit(EXIT_FAILURE);
     }
 
